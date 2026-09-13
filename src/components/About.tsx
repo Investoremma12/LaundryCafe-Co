@@ -4,12 +4,12 @@ import { trustItems } from '../data';
 export default function About() {
 	return (
 		<section id="about" className="bg-beige py-24">
-			<div className="mx-auto grid max-w-310 grid-cols-1 gap-10 px-6 md:grid-cols-2 md:gap-16 md:px-8">
+			<div className="mx-auto grid max-w-310 grid-cols-1 gap-10 px-6 md:px-8 lg:grid-cols-2 lg:gap-16">
 				<Reveal className="relative">
 					<img
 						src="/images/about-team.jpg"
 						alt="The Laundry Cafe and Co. team folding fresh linens"
-						className="h-115 w-full rounded-[26px] object-cover shadow-card"
+						className="h-90 w-full rounded-[26px] object-cover shadow-card sm:h-115"
 					/>
 					<span className="mt-4 inline-block max-w-42.5 rounded-2xl bg-white px-5 py-4 font-serif-display text-[14.5px] italic leading-snug text-navy shadow-card md:absolute md:-bottom-5 md:-right-4 md:mt-0">
 						&ldquo;Clean clothes, happier days.&rdquo;

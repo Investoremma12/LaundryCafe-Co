@@ -31,20 +31,20 @@ export default function Navbar() {
 
 	return (
 		<header className="sticky top-0 z-50 border-b border-black/5 bg-bg/90 backdrop-blur-md">
-			<div className="mx-auto flex max-w-310 items-center justify-between gap-6 px-6 py-4 md:px-8">
+			<div className="mx-auto flex max-w-310 items-center justify-between gap-2 px-4 py-3.5 sm:gap-6 sm:px-6 sm:py-4 md:px-8">
 				<a
 					href="#home"
 					aria-label="The Laundry Cafe & Co. home"
-					className="flex items-center gap-2.5"
+					className="flex min-w-0 items-center gap-2 sm:gap-2.5"
 				>
-					<img src={logoIcon} alt="" className="h-9 w-auto" />
-					<span className="font-serif-display text-lg font-semibold text-navy">
+					<img src={logoIcon} alt="" className="h-8 w-auto shrink-0 sm:h-9" />
+					<span className="truncate font-serif-display text-[16px] font-semibold text-navy sm:text-lg">
 						The Laundry Cafe <span className="italic text-green">&amp;</span>{' '}
 						Co.
 					</span>
 				</a>
 
-				<nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
+				<nav aria-label="Primary" className="hidden items-center gap-8 lg:flex">
 					{NAV_LINKS.map((link) => (
 						<a
 							key={link.href}
@@ -62,7 +62,7 @@ export default function Navbar() {
 
 				<Button
 					href="#contact"
-					className="hidden md:inline-flex"
+					className="hidden! lg:inline-flex!"
 					showArrow={false}
 				>
 					Book Now
@@ -74,7 +74,7 @@ export default function Navbar() {
 					aria-expanded={isOpen}
 					aria-controls="mobile-menu"
 					onClick={() => setIsOpen((prev) => !prev)}
-					className="flex h-10 w-10 items-center justify-center text-navy md:hidden"
+					className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-navy transition-colors hover:bg-green-pale lg:hidden"
 				>
 					{isOpen ? <X size={22} /> : <Menu size={22} />}
 				</button>
@@ -89,9 +89,9 @@ export default function Navbar() {
 						animate={{ height: 'auto', opacity: 1 }}
 						exit={{ height: 0, opacity: 0 }}
 						transition={{ duration: 0.25, ease: 'easeInOut' }}
-						className="overflow-hidden border-t border-black/5 md:hidden"
+						className="overflow-hidden border-t border-black/5 lg:hidden"
 					>
-						<div className="flex flex-col gap-1 px-6 pb-6 pt-2">
+						<div className="flex flex-col gap-1 px-4 pb-6 pt-2 sm:px-6">
 							{NAV_LINKS.map((link) => (
 								<a
 									key={link.href}

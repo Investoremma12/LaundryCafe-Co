@@ -24,7 +24,7 @@ export default function Testimonials() {
 					className="mb-4"
 				/>
 
-				<div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
+				<div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-3">
 					{testimonials.map((t, i) => (
 						<Reveal key={t.name} delay={i * 0.08} as="article">
 							<div className="rounded-[22px] bg-white p-7 shadow-card">

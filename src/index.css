@@ -133,7 +133,28 @@
 	content: '';
 }
 
+@media (max-width: 1023px) {
+	.hero-shell > div:first-child {
+		min-height: auto;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 2.5rem;
+		padding-top: 3.5rem;
+		padding-bottom: 3.5rem;
+	}
+
+	.hero-image-frame {
+		min-height: 390px;
+		border-radius: 1.75rem;
+	}
+}
+
 @media (max-width: 767px) {
+	.hero-shell > div:first-child {
+		gap: 2rem;
+		padding-top: 3rem;
+		padding-bottom: 3rem;
+	}
+
 	.hero-image-frame {
 		min-height: 330px;
 		border-radius: 1.5rem;

@@ -47,7 +47,7 @@ export default function Booking() {
 
 	return (
 		<section id="contact" className="bg-bg py-24">
-			<div className="mx-auto grid max-w-310 grid-cols-1 gap-14 px-6 md:grid-cols-[1fr_1.1fr] md:gap-16 md:px-8">
+			<div className="mx-auto grid max-w-310 grid-cols-1 gap-12 px-6 md:px-8 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
 				<Reveal>
 					<SectionIntro
 						eyebrow="Book now"

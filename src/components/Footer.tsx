@@ -16,7 +16,7 @@ export default function Footer() {
 
 	return (
 		<footer className="bg-navy pt-16 text-[#D9E2DE]">
-			<div className="mx-auto grid max-w-310 grid-cols-1 gap-10 px-6 pb-12 sm:grid-cols-2 md:px-8 lg:grid-cols-[1.4fr_1fr_1.4fr_1fr]">
+			<div className="mx-auto grid max-w-310 grid-cols-1 gap-10 px-6 pb-12 sm:grid-cols-2 md:px-8 xl:grid-cols-[1.4fr_1fr_1.4fr_1fr]">
 				<div>
 					<a href="#home" className="flex items-center gap-2.5">
 						<img src={logoIcon} alt="" className="h-9 w-auto" />
