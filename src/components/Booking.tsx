@@ -1,49 +1,50 @@
-import { useState, type FormEvent } from 'react';
+import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
+import { useForm } from 'react-hook-form';
 import Reveal from './Reveal';
 import SectionIntro from './SectionIntro';
 import { CONTACT_EMAIL, SERVICE_TYPE_OPTIONS } from '../data';
 
-interface FormState {
-	fullName: string;
+interface BookingFormValues {
+	full_name: string;
 	email: string;
 	phone: string;
-	serviceType: string;
+	service_type: string;
+	preferred_date: string;
 	message: string;
 }
 
-const initialState: FormState = {
-	fullName: '',
-	email: '',
-	phone: '',
-	serviceType: '',
-	message: '',
-};
-
 export default function Booking() {
-	const [form, setForm] = useState<FormState>(initialState);
+	const [submitMessage, setSubmitMessage] = useState('');
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState: { errors, isSubmitting },
+	} = useForm<BookingFormValues>({ mode: 'onBlur' });
 
-	function update<K extends keyof FormState>(key: K, value: FormState[K]) {
-		setForm((prev) => ({ ...prev, [key]: value }));
-	}
-
-	// This form isn't wired to an email service (e.g. EmailJS) or backend yet.
-	// On submit we open the visitor's email client with the details pre-filled
-	// so nothing is falsely presented as "sent" until a real service is connected.
-	function handleSubmit(e: FormEvent<HTMLFormElement>) {
-		e.preventDefault();
+	function submitBooking(data: BookingFormValues) {
 		const subject = encodeURIComponent(
-			`Booking Request: ${form.serviceType || 'General enquiry'}`,
+			`Booking Request: ${data.service_type || 'General enquiry'}`,
 		);
 		const body = encodeURIComponent(
-			`Name: ${form.fullName}\nEmail: ${form.email}\nPhone: ${form.phone}\nService Type: ${form.serviceType}\n\nMessage:\n${form.message}`,
+			`Name: ${data.full_name}\nEmail: ${data.email}\nPhone: ${data.phone}\nService Type: ${data.service_type}\nPreferred Date: ${data.preferred_date}\n\nMessage:\n${data.message}`,
 		);
-		window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+
+		window.open(
+			`mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`,
+			'_self',
+		);
+		reset();
+		setSubmitMessage('Your email app is opening with the booking details.');
 	}
+
+	const today = new Date().toISOString().split('T')[0];
 
 	const inputClasses =
 		'w-full rounded-xl border-[1.5px] border-black/10 bg-[#FBFCFA] px-3.5 py-3 text-[14.5px] text-ink transition-colors focus:border-green focus:outline-none';
 	const labelClasses = 'mb-1.5 block text-[13.5px] font-semibold text-navy';
+	const errorClasses = 'mt-1.5 text-[12.5px] font-medium text-red-700';
 
 	return (
 		<section id="contact" className="bg-bg py-24">
@@ -74,7 +75,7 @@ export default function Booking() {
 
 				<Reveal delay={0.1}>
 					<form
-						onSubmit={handleSubmit}
+						onSubmit={handleSubmit(submitBooking)}
 						className="relative overflow-hidden rounded-[26px] border border-white bg-white/85 p-9 shadow-card backdrop-blur-sm sm:p-10"
 					>
 						<div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-green-pale/80" />
@@ -84,14 +85,16 @@ export default function Booking() {
 							</label>
 							<input
 								id="fullName"
-								name="fullName"
 								type="text"
-								required
 								autoComplete="name"
 								className={inputClasses}
-								value={form.fullName}
-								onChange={(e) => update('fullName', e.target.value)}
+								{...register('full_name', {
+									required: 'Please enter your full name.',
+								})}
 							/>
+							{errors.full_name && (
+								<p className={errorClasses}>{errors.full_name.message}</p>
+							)}
 						</div>
 
 						<div className="mb-4.5 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -101,14 +104,20 @@ export default function Booking() {
 								</label>
 								<input
 									id="email"
-									name="email"
 									type="email"
-									required
 									autoComplete="email"
 									className={inputClasses}
-									value={form.email}
-									onChange={(e) => update('email', e.target.value)}
+									{...register('email', {
+										required: 'Please enter your email address.',
+										pattern: {
+											value: /^\S+@\S+\.\S+$/,
+											message: 'Please enter a valid email address.',
+										},
+									})}
 								/>
+								{errors.email && (
+									<p className={errorClasses}>{errors.email.message}</p>
+								)}
 							</div>
 							<div>
 								<label htmlFor="phone" className={labelClasses}>
@@ -116,14 +125,16 @@ export default function Booking() {
 								</label>
 								<input
 									id="phone"
-									name="phone"
 									type="tel"
-									required
 									autoComplete="tel"
 									className={inputClasses}
-									value={form.phone}
-									onChange={(e) => update('phone', e.target.value)}
+									{...register('phone', {
+										required: 'Please enter your phone number.',
+									})}
 								/>
+								{errors.phone && (
+									<p className={errorClasses}>{errors.phone.message}</p>
+								)}
 							</div>
 						</div>
 
@@ -133,11 +144,10 @@ export default function Booking() {
 							</label>
 							<select
 								id="serviceType"
-								name="serviceType"
-								required
 								className={inputClasses}
-								value={form.serviceType}
-								onChange={(e) => update('serviceType', e.target.value)}
+								{...register('service_type', {
+									required: 'Please select a service.',
+								})}
 							>
 								<option value="" disabled>
 									Select a service
@@ -154,6 +164,27 @@ export default function Booking() {
 									),
 								)}
 							</select>
+							{errors.service_type && (
+								<p className={errorClasses}>{errors.service_type.message}</p>
+							)}
+						</div>
+
+						<div className="mb-4.5">
+							<label htmlFor="preferredDate" className={labelClasses}>
+								Preferred Date
+							</label>
+							<input
+								id="preferredDate"
+								type="date"
+								min={today}
+								className={inputClasses}
+								{...register('preferred_date', {
+									required: 'Please choose a preferred date.',
+								})}
+							/>
+							{errors.preferred_date && (
+								<p className={errorClasses}>{errors.preferred_date.message}</p>
+							)}
 						</div>
 
 						<div className="mb-4.5">
@@ -162,29 +193,36 @@ export default function Booking() {
 							</label>
 							<textarea
 								id="message"
-								name="message"
 								rows={4}
 								placeholder="Tell us a bit about what you need..."
 								className={`${inputClasses} resize-y`}
-								value={form.message}
-								onChange={(e) => update('message', e.target.value)}
+								{...register('message')}
 							/>
 						</div>
 
+						{submitMessage && (
+							<p
+								className="mb-4 rounded-xl bg-green-pale px-4 py-3 text-[13px] font-semibold text-green-dark"
+								role="status"
+							>
+								{submitMessage}
+							</p>
+						)}
 						<button
 							type="submit"
+							disabled={isSubmitting}
 							className="group relative flex w-full items-center justify-center gap-2 rounded-full bg-green px-6 py-3.5 text-[15px] font-semibold text-white shadow-[0_18px_34px_-18px_rgba(73,106,75,0.9)] transition-[transform,background-color,box-shadow] duration-300 hover:-translate-y-0.5 hover:bg-green-dark hover:shadow-[0_22px_40px_-18px_rgba(73,106,75,0.9)]"
 						>
-							Send Request{' '}
+							{isSubmitting ? 'Preparing...' : 'Open Email App'}{' '}
 							<ArrowRight
 								size={16}
 								className="transition-transform duration-300 group-hover:translate-x-1"
 							/>
 						</button>
 						<p className="mt-3.5 text-[12.5px] leading-relaxed text-ink-soft">
-							This form isn&rsquo;t connected to an email service yet &mdash;
-							submitting will open your email app with the details pre-filled so
-							you can send them to us directly.
+							Note: submitting will
+							open your email app with the details pre-filled so you can send
+							them to us directly.
 						</p>
 					</form>
 				</Reveal>
