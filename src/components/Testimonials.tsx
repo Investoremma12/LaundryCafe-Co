@@ -46,7 +46,7 @@ export default function Testimonials() {
 											{t.name}
 										</p>
 										<p className="mt-0.5 text-[12.5px] text-ink-soft">
-											Placeholder review
+											Customer Review
 										</p>
 									</div>
 								</div>
